@@ -6,38 +6,65 @@ from datetime import datetime
 
 IMAGE_NAME = "billingsimulation"
 CONTAINER_NAME = "billingsimulation_live"
+IMAGE_PATH = "./billingsimulation"
 
 client = docker.from_env()
 
-# -------------------------------------------------------------------
-#  Create container if not exists (or replace it)
-# -------------------------------------------------------------------
-def ensure_container():
-    try:
-        old = client.containers.get(CONTAINER_NAME)
-        print("[+] Old container found. Removing...")
-        old.stop()
-        old.remove()
-    except docker.errors.NotFound:
-        print("[+] No old container. Creating fresh one...")
-    except Exception as e:
-        print("[-] Unexpected error:", e)
 
+# -----------------------------------------------------------
+# Image responsibilities
+# -----------------------------------------------------------
+def image_exists(name: str) -> bool:
     try:
-        print("[+] Creating new container from image:", IMAGE_NAME)
-        container = client.containers.run(
-            IMAGE_NAME,
-            name=CONTAINER_NAME,
-            detach=True,
-            command=["python", "-u", "main.py"]
-        )
-        print("[+] Container started:", CONTAINER_NAME)
-        return container
+        client.images.get(name)
+        return True
     except docker.errors.ImageNotFound:
-        raise Exception(f"Image '{IMAGE_NAME}' not found.")
-    except Exception as e:
-        raise Exception("[-] Failed to create container: " + str(e))
+        return False
 
+
+def build_image(name: str, path="."):
+    print(f"[!] Image '{name}' not found. Building...")
+    image, logs = client.images.build(path=path, tag=name)
+    print(f"[+] Image '{name}' built successfully.")
+    return image
+
+
+# -----------------------------------------------------------
+# Container responsibilities
+# -----------------------------------------------------------
+def remove_container(name: str):
+    try:
+        container = client.containers.get(name)
+        print("[+] Old container found. Removing...")
+        container.stop()
+        container.remove()
+    except docker.errors.NotFound:
+        print("[+] No old container to remove.")
+    except Exception as e:
+        print("[-] Failed to remove container:", e)
+
+
+def create_container(image: str, name: str):
+    print(f"[+] Creating container '{name}' from image '{image}'...")
+    container = client.containers.run(
+        image,
+        name=name,
+        detach=True,
+        command=["python", "-u", "main.py"]
+    )
+    print(f"[+] Container '{name}' started.")
+    return container
+
+
+# -----------------------------------------------------------
+# Orchestrator (coordinates responsibilities)
+# -----------------------------------------------------------
+def ensure_container():
+    if not image_exists(IMAGE_NAME):
+        build_image(IMAGE_NAME,path=IMAGE_PATH)
+
+    remove_container(CONTAINER_NAME)
+    return create_container(IMAGE_NAME, CONTAINER_NAME)
 
 container = ensure_container()
 stats_stream = container.stats(stream=True)
