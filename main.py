@@ -2,18 +2,17 @@ import docker
 import json
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from datetime import datetime
 
 IMAGE_NAME = "billingsimulation"
 CONTAINER_NAME = "billingsimulation_live"
 
 client = docker.from_env()
 
-
 # -------------------------------------------------------------------
 #  Create container if not exists (or replace it)
 # -------------------------------------------------------------------
 def ensure_container():
-    # Delete old container if exists
     try:
         old = client.containers.get(CONTAINER_NAME)
         print("[+] Old container found. Removing...")
@@ -24,7 +23,6 @@ def ensure_container():
     except Exception as e:
         print("[-] Unexpected error:", e)
 
-    # Create new container
     try:
         print("[+] Creating new container from image:", IMAGE_NAME)
         container = client.containers.run(
@@ -36,7 +34,7 @@ def ensure_container():
         print("[+] Container started:", CONTAINER_NAME)
         return container
     except docker.errors.ImageNotFound:
-        raise Exception(f"Image '{IMAGE_NAME}' not found. Build or pull it first.")
+        raise Exception(f"Image '{IMAGE_NAME}' not found.")
     except Exception as e:
         raise Exception("[-] Failed to create container: " + str(e))
 
@@ -62,7 +60,6 @@ def calculate_cpu_percent(stats):
         system_cpu = cpu_stats.get("system_cpu_usage", 0)
         pre_system_cpu = precpu_stats.get("system_cpu_usage", 0)
 
-        # Fix missing system_cpu in Windows Docker
         if system_cpu == 0 or pre_system_cpu == 0:
             return cpu_stats["cpu_usage"].get("total_usage", 0) / 1e7
 
@@ -74,14 +71,14 @@ def calculate_cpu_percent(stats):
 
         if cpu_delta > 0 and system_delta > 0:
             return (cpu_delta / system_delta) * cpu_count * 100
-    except Exception as e:
-        print("CPU calc error:", e)
+    except:
+        pass
 
     return 0
 
 
 # -------------------------------------------------------------------
-#  Extract usable stats
+#  Extract usable stats from docker json
 # -------------------------------------------------------------------
 def format_stats(stat):
     cpu = calculate_cpu_percent(stat)
@@ -89,7 +86,6 @@ def format_stats(stat):
     mem_used = stat["memory_stats"]["usage"]
     mem_limit = stat["memory_stats"]["limit"]
 
-    # Network
     try:
         net = list(stat["networks"].values())[0]
         rx = net["rx_bytes"]
@@ -97,7 +93,6 @@ def format_stats(stat):
     except:
         rx = tx = 0
 
-    # Disk
     try:
         blk = stat["blkio_stats"]["io_service_bytes_recursive"]
         read = blk[0]["value"] if blk else 0
@@ -119,6 +114,7 @@ def format_stats(stat):
 # -------------------------------------------------------------------
 #  Buffers
 # -------------------------------------------------------------------
+timestamps = []
 cpu_vals = []
 mem_vals = []
 rx_vals = []
@@ -128,13 +124,17 @@ write_vals = []
 
 
 # -------------------------------------------------------------------
-#  Animation
+#  Animation loop
 # -------------------------------------------------------------------
 def animate(i):
     try:
         stat = json.loads(next(stats_stream))
         s = format_stats(stat)
 
+        # Append timestamp
+        timestamps.append(datetime.now().strftime("%H:%M:%S"))
+
+        # Append stats
         cpu_vals.append(s["cpu"])
         mem_vals.append(s["mem_used"])
         rx_vals.append(s["rx"])
@@ -144,33 +144,49 @@ def animate(i):
 
         # Keep buffer size manageable
         max_len = 200
-        for arr in [cpu_vals, mem_vals, rx_vals, tx_vals, read_vals, write_vals]:
+        for arr in [timestamps, cpu_vals, mem_vals, rx_vals, tx_vals, read_vals, write_vals]:
             if len(arr) > max_len:
                 arr.pop(0)
 
         # Clear plots
         ax1.clear(); ax2.clear(); ax3.clear(); ax4.clear()
 
-        # CPU
-        ax1.plot(cpu_vals)
-        ax1.set_title(f"CPU Usage: {cpu_vals[-1]:.2f}%")
-        ax1.set_ylim(0, max(120, max(cpu_vals) + 10))
+        # ---- CPU ----
+        ax1.plot(timestamps, cpu_vals)
+        ax1.set_title(f"CPU Usage: {cpu_vals[-1]:.2f}%",color="red",bbox=dict(facecolor="black", edgecolor="none", pad=4))
+        ax1.set_ylim(0, max(cpu_vals + [10]) * 1.2)
+        ax1.tick_params(axis='x', rotation=45)
 
-        # Memory
-        ax2.plot(mem_vals)
-        ax2.set_title(f"Memory Usage: {mem_vals[-1]:.2f}GB / {s['mem_limit']:.2f}GB")
+        # ---- Memory ----
+        ax2.plot(timestamps, mem_vals)
+        ax2.set_title(f"Memory Usage: {mem_vals[-1]:.2f}GB / {s['mem_limit']:.2f}GB",
+        color="red",bbox=dict(facecolor="black", edgecolor="none", pad=4))
+        ax2.set_ylim(0, max(mem_vals + [1]) * 1.2)
+        ax2.tick_params(axis='x', rotation=45)
 
-        # Disk IO
-        ax3.plot(read_vals, label="Read")
-        ax3.plot(write_vals, label="Write")
-        ax3.set_title(f"Disk IO: {read_vals[-1]:.2f}MB / {write_vals[-1]:.2f}KB")
+        # ---- Disk I/O ----
+        ax3.plot(timestamps, read_vals, label="Read (MB)")
+        ax3.plot(timestamps, write_vals, label="Write (KB)")
+        ax3.set_title(
+            f"Disk IO: {read_vals[-1]:.2f}MB / {write_vals[-1]:.2f}KB",
+            color="red",bbox=dict(facecolor="black", edgecolor="none", pad=4)
+        )
+
+        ax3.set_ylim(0, max(max(read_vals), max(write_vals)) * 1.2)
         ax3.legend()
+        ax3.tick_params(axis='x', rotation=45)
 
-        # Network IO
-        ax4.plot(rx_vals, label="RX")
-        ax4.plot(tx_vals, label="TX")
-        ax4.set_title(f"Network IO: {rx_vals[-1]/1024:.2f}KB / {tx_vals[-1]/1024:.2f}KB")
+        # ---- Network I/O ----
+        ax4.plot(timestamps, rx_vals, label="RX (bytes)")
+        ax4.plot(timestamps, tx_vals, label="TX (bytes)")
+        ax4.set_title(
+    f"Network IO: {rx_vals[-1]/1024:.2f}KB / {tx_vals[-1]/1024:.2f}KB",
+    color="red",bbox=dict(facecolor="black", edgecolor="none", pad=4)
+)
+
+        ax4.set_ylim(0, max(max(rx_vals), max(tx_vals)) * 1.2)
         ax4.legend()
+        ax4.tick_params(axis='x', rotation=45)
 
     except StopIteration:
         print("[-] Stats stream ended.")
@@ -181,7 +197,7 @@ def animate(i):
 #  Plot layout
 # -------------------------------------------------------------------
 fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(14, 8))
-fig.suptitle("LIVE Docker Stats Dashboard", fontsize=16)
+fig.suptitle("LIVE Docker Stats Dashboard (Dynamic Scaling)", fontsize=16)
 
 ani = animation.FuncAnimation(fig, animate, interval=900)
 plt.tight_layout()
