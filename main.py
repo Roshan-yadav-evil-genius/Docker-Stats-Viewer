@@ -199,7 +199,9 @@ def animate(i):
             color="red",bbox=dict(facecolor="black", edgecolor="none", pad=4)
         )
 
-        ax3.set_ylim(0, max(max(read_vals), max(write_vals)) * 1.2)
+        # Fix: Handle case when arrays are empty or all zeros
+        max_disk = max(max(read_vals) if read_vals else 0, max(write_vals) if write_vals else 0)
+        ax3.set_ylim(0, max(max_disk * 1.2, 1))  # Ensure minimum range of 1
         ax3.legend()
         ax3.tick_params(axis='x', rotation=45)
 
@@ -211,7 +213,9 @@ def animate(i):
     color="red",bbox=dict(facecolor="black", edgecolor="none", pad=4)
 )
 
-        ax4.set_ylim(0, max(max(rx_vals), max(tx_vals)) * 1.2)
+        # Fix: Handle case when arrays are empty or all zeros
+        max_net = max(max(rx_vals) if rx_vals else 0, max(tx_vals) if tx_vals else 0)
+        ax4.set_ylim(0, max(max_net * 1.2, 1))  # Ensure minimum range of 1
         ax4.legend()
         ax4.tick_params(axis='x', rotation=45)
 
@@ -226,6 +230,6 @@ def animate(i):
 fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(14, 8))
 fig.suptitle("LIVE Docker Stats Dashboard (Dynamic Scaling)", fontsize=16)
 
-ani = animation.FuncAnimation(fig, animate, interval=900)
+ani = animation.FuncAnimation(fig, animate, interval=900, cache_frame_data=False)
 plt.tight_layout()
 plt.show()
