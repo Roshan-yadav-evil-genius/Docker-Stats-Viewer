@@ -1,0 +1,94 @@
+{
+    "id": "bb75fce4-5053-4732-be09-6908832cdd19",
+    "nodes": [
+        {
+            "id": "97622dc7-c026-4f90-84a9-1fd8e0060c5c",
+            "node_type": {
+                "id": "1f2db3bc-512d-44b4-bcd7-b96ff8842741",
+                "name": "Cookie Store",
+                "description": "Stores cookies to preserve session.",
+                "initiator": false
+            },
+            "created_at": "2025-09-07T17:59:56.616689Z",
+            "updated_at": "2025-09-10T16:10:20.969956Z",
+            "position_x": -808.2395768765223,
+            "position_y": -470.4771618295235,
+            "data": {
+                "cookies": "[\n    {\n        \"domain\": \".freelancer.in\",\n        \"hostOnly\": false,\n        \"httpOnly\": false,\n        \"name\": \"GETAFREE_AUTH_HASH_V2\",\n        \"path\": \"/\",\n        \"sameSite\": \"no_restriction\",\n        \"secure\": true,\n        \"session\": true,\n        \"storeId\": null,\n        \"value\": \"iqqqr4vc%2BCxznnsqGhqyMiMMk6Tqqgi%2BAoAm7vthOLs%3D\"\n    },\n    {\n        \"domain\": \"www.freelancer.in\",\n        \"hostOnly\": true,\n        \"httpOnly\": false,\n        \"name\": \"is_from_eu\",\n        \"path\": \"/\",\n        \"sameSite\": null,\n        \"secure\": true,\n        \"session\": true,\n        \"storeId\": null,\n        \"value\": \"false\"\n    },\n    {\n        \"domain\": \"www.freelancer.in\",\n        \"expirationDate\": 1772821329,\n        \"hostOnly\": true,\n        \"httpOnly\": false,\n        \"name\": \"g_state\",\n        \"path\": \"/\",\n        \"sameSite\": null,\n        \"secure\": false,\n        \"session\": false,\n        \"storeId\": null,\n        \"value\": \"{\\\"i_l\\\":0}\"\n    },\n    {\n        \"domain\": \".freelancer.in\",\n        \"expirationDate\": 1791829332.568341,\n        \"hostOnly\": false,\n        \"httpOnly\": false,\n        \"name\": \"GETAFREE_NOTNEW\",\n        \"path\": \"/\",\n        \"sameSite\": null,\n        \"secure\": true,\n        \"session\": false,\n        \"storeId\": null,\n        \"value\": \"true\"\n    },\n    {\n        \"domain\": \".freelancer.in\",\n        \"expirationDate\": 1788806477,\n        \"hostOnly\": false,\n        \"httpOnly\": false,\n        \"name\": \"session2\",\n        \"path\": \"/\",\n        \"sameSite\": \"lax\",\n        \"secure\": true,\n        \"session\": false,\n        \"storeId\": null,\n        \"value\": \"6eaff4b1bc01472552eb2b31f0a3c8d57679e372d176f2d9415abb6f34c6d61f8b7e800f7f123c03\"\n    },\n    {\n        \"domain\": \"www.freelancer.in\",\n        \"expirationDate\": 1757875276,\n        \"hostOnly\": true,\n        \"httpOnly\": false,\n        \"name\": \"XSRF-TOKEN\",\n        \"path\": \"/\",\n        \"sameSite\": null,\n        \"secure\": true,\n        \"session\": false,\n        \"storeId\": null,\n        \"value\": \"NPdLzFwHsrbeDgoIGACC4ipfo8W53yEUweclajQq3vp9Nu2NamiskBR9EUgRzkVZ\"\n    },\n    {\n        \"domain\": \".freelancer.in\",\n        \"expirationDate\": 1788028790,\n        \"hostOnly\": false,\n        \"httpOnly\": false,\n        \"name\": \"_tracking_session\",\n        \"path\": \"/\",\n        \"sameSite\": \"lax\",\n        \"secure\": true,\n        \"session\": false,\n        \"storeId\": null,\n        \"value\": \"884efcc6-faea-baa2-02f0-5a98060a5ffc\"\n    },\n    {\n        \"domain\": \".freelancer.in\",\n        \"expirationDate\": 1788028809.562661,\n        \"hostOnly\": false,\n        \"httpOnly\": false,\n        \"name\": \"GETAFREE_LANGUAGE\",\n        \"path\": \"/\",\n        \"sameSite\": null,\n        \"secure\": true,\n        \"session\": false,\n        \"storeId\": null,\n        \"value\": \"en\"\n    },\n    {\n        \"domain\": \".freelancer.in\",\n        \"hostOnly\": false,\n        \"httpOnly\": false,\n        \"name\": \"GETAFREE_USER_ID\",\n        \"path\": \"/\",\n        \"sameSite\": \"no_restriction\",\n        \"secure\": true,\n        \"session\": true,\n        \"storeId\": null,\n        \"value\": \"80253988\"\n    },\n    {\n        \"domain\": \"www.freelancer.in\",\n        \"hostOnly\": true,\n        \"httpOnly\": false,\n        \"name\": \"is_from_eu_user_id\",\n        \"path\": \"/\",\n        \"sameSite\": null,\n        \"secure\": true,\n        \"session\": true,\n        \"storeId\": null,\n        \"value\": \"80253988\"\n    },\n    {\n        \"domain\": \".freelancer.in\",\n        \"expirationDate\": 1772821332.568294,\n        \"hostOnly\": false,\n        \"httpOnly\": true,\n        \"name\": \"qfence\",\n        \"path\": \"/\",\n        \"sameSite\": \"lax\",\n        \"secure\": true,\n        \"session\": false,\n        \"storeId\": null,\n        \"value\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkZyZWVsYW5jZXJcXEdBRlxcQ29yZVxcSldUXFxKV1QifQ.eyI4MDI1Mzk4OCI6MTc1NzI2OTMzMiwic3ViIjoicXVpY2tsb2dpbmZlbmNlIiwiaWF0IjoxNzU3MjY5MzMyfQ.7UsE_1sMdhZgIccRWmObgjBt7ouItGTs4ExfSPHqnww\"\n    }\n]"
+            }
+        },
+        {
+            "id": "fff97bbd-4e4c-4fdb-8c7c-00e609bee880",
+            "node_type": {
+                "id": "1a7b39c0-8dc3-48c2-999f-042b27679d46",
+                "name": "Cosine Similarity",
+                "description": "check cosine similarity",
+                "initiator": false
+            },
+            "created_at": "2025-09-07T15:05:03.201766Z",
+            "updated_at": "2025-09-10T16:10:09.733014Z",
+            "position_x": -43.933021222506,
+            "position_y": -482.7298245813057,
+            "data": {
+                "input": "I developed a Python project using YOLO with the Ultralytics library to detect buffaloes in images and videos. I trained a custom model on a buffalo dataset and implemented real-time detection. The project outputs bounding boxes and coordinates for each detected buffalo for further analysis or tracking.",
+                "threshold": 0.3
+            }
+        },
+        {
+            "id": "f50d1e16-40fc-4ecb-b3d5-ffd69d247e79",
+            "node_type": {
+                "id": "1a7b39c0-8dc3-48c2-999f-042b27679d46",
+                "name": "Cosine Similarity",
+                "description": "check cosine similarity",
+                "initiator": false
+            },
+            "created_at": "2025-09-05T19:52:29.401737Z",
+            "updated_at": "2025-09-10T16:10:13.284400Z",
+            "position_x": -40.852385029805816,
+            "position_y": -167.95706023095818,
+            "data": {
+                "input": "I developed a small web development project using React and Node.js. I built a responsive frontend with interactive forms and a backend API for data storage and retrieval. The project allows users to submit, view, and manage information efficiently in a user-friendly interface.",
+                "threshold": "0.6"
+            }
+        },
+        {
+            "id": "5cf2ce07-0c8f-4291-8db6-b18987c5607b",
+            "node_type": {
+                "id": "13b9c960-ba45-42b6-899d-72f98b6ea4db",
+                "name": "Freelance Scraper",
+                "description": "Playwright scraper to monitor new job postings",
+                "initiator": true
+            },
+            "created_at": "2025-09-05T19:49:28.616625Z",
+            "updated_at": "2025-09-10T16:10:06.870873Z",
+            "position_x": -428.61560217792385,
+            "position_y": -321.8505513985795,
+            "data": {
+                "projectPageUrl": "https://www.freelancer.in/search/projects?projectSkills=3,7,9,13,31,38,69,95,106,115,116,137,305,335,668,913,962&projectLanguages=en",
+                "executionMode": "1"
+            }
+        }
+    ],
+    "connections": [
+        {
+            "id": "8381bc61-80c8-4fa5-a897-538f0d016cc1",
+            "source_node": "5cf2ce07-0c8f-4291-8db6-b18987c5607b",
+            "target_node": "fff97bbd-4e4c-4fdb-8c7c-00e609bee880"
+        },
+        {
+            "id": "b73836c6-b219-451b-bac0-ab780414201c",
+            "source_node": "97622dc7-c026-4f90-84a9-1fd8e0060c5c",
+            "target_node": "5cf2ce07-0c8f-4291-8db6-b18987c5607b"
+        },
+        {
+            "id": "40a59a03-38c6-465b-a6fb-8e12ed66cb04",
+            "source_node": "5cf2ce07-0c8f-4291-8db6-b18987c5607b",
+            "target_node": "f50d1e16-40fc-4ecb-b3d5-ffd69d247e79"
+        }
+    ],
+    "created_at": "2025-09-05T18:37:25.567197Z",
+    "updated_at": "2025-09-11T07:31:11.756486Z",
+    "name": "Order Processing",
+    "description": "Manages order validation, payment, and confirmation.",
+    "task_id": "b35dca7b-8768-4baa-8ad3-be95610585c5"
+}
