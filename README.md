@@ -2,10 +2,6 @@
 
 A real-time Docker container resource monitoring tool that displays CPU, Memory, Network I/O, and Disk I/O statistics in a live-updating matplotlib dashboard. This project extracts the underlying logic from Docker Desktop's Stats tab and renders the graphs for web interface integration.
 
-## About
-
-This project is designed to display the resource statistics of a running Docker container, similar to the "Stats" tab in Docker Desktop. I'm building it to extract the underlying logic and render the graphs on a web interface, where my clients can run Docker containers and monitor their resource usage in real time.
-
 ## Features
 
 - **Real-time Monitoring**: Live-updating dashboard showing container resource usage
